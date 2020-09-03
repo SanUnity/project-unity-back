@@ -1,0 +1,31 @@
+{
+    "settings" : {
+        "number_of_shards" : 12, 
+        "number_of_replicas" : 1 
+    },
+    "mappings" : {
+        "dynamic": false,
+        "_source": {
+            "enabled": true
+          },
+        "properties" : {
+            "phoneHash" : { "type" : "keyword" },
+            "timestamp" : { "type" : "date", "format" : "epoch_second"},
+            "anonymous" : { "type" : "boolean"},
+            "updateChannels" : { "type" : "boolean"},
+            "age" : { "type" : "short" },
+            "gender" : { "type" : "keyword" },
+            "postalCode" : { "type" : "keyword" },
+            "stateID" : { "type" : "keyword" },
+            "municipalityID" : { "type" : "keyword" },
+            "suburbID" : { "type" : "keyword" },
+            "numberInstallations" : { "type" : "integer" },
+            "contactTrace" : { "type" : "boolean" },
+            "geo" : { "type" : "boolean" },
+            "totalProfiles" : { "type" : "integer" },
+            "confirmInfected" : { "type" : "boolean" },
+            "submitExposureNotification" : { "type" : "boolean" },
+            "exposedContact" : { "type" : "boolean" }
+        }
+    }
+}

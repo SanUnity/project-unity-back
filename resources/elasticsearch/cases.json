@@ -1,0 +1,24 @@
+{
+    "settings" : {
+        "number_of_shards" : 6, 
+        "number_of_replicas" : 1 
+    },
+    "mappings" : {
+        "dynamic": false,
+        "_source": {
+            "enabled": true
+        },
+        "properties" : {
+            "id" : { "type" : "keyword" },
+            "stateRe" : { "type" : "keyword" },
+            "municipalityRe" : { "type" : "keyword" },
+            "dateCreated" : { "type" : "date", "format" : "yyyy-MM-dd"},
+            "dateUpdated" : { "type" : "date", "format" : "yyyy-MM-dd"},
+            "dateAdmission" : { "type" : "date", "format" : "yyyy-MM-dd"},
+            "dateSyntoms" : { "type" : "date", "format" : "yyyy-MM-dd"},
+            "dateDeath" : { "type" : "date", "format" : "yyyy-MM-dd"},
+            "result" : { "type" : "short" },
+            "death" : { "type" : "boolean" }
+        }
+    }
+}

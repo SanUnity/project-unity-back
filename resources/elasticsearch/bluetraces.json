@@ -1,0 +1,22 @@
+{
+    "settings" : {
+        "number_of_shards" : 12, 
+        "number_of_replicas" : 1 
+    },
+    "mappings" : {
+        "dynamic": false,
+        "_source": {
+            "enabled": true
+          },
+        "properties" : {
+            "userID1" : { "type" : "keyword" },
+            "userID2" : { "type" : "keyword" },
+            "timestamp" : { "type" : "date", "format" : "epoch_second"},
+            "timeUpload" : { "type" : "date", "format" : "epoch_second"},
+            "modelP" : { "type" : "keyword" },
+            "modelC" : { "type" : "keyword" },
+            "rssi" : { "type" : "integer" },
+            "txPower" : { "type" : "integer" }
+        }
+    }
+}

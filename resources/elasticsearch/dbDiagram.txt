@@ -1,0 +1,188 @@
+//https://dbdiagram.io/d
+
+Table users {
+  id string [pk, increment] // auto-increment
+  phoneHash varchar
+  phone varchar
+  timestamp timestamp
+  updateChannels boolean
+  mainProfile boolean
+  age integer
+  gender string
+  postalCode string
+  stateID string
+  municipalityID string
+  suburbID string
+  numberInstallations integer
+  contactTrace boolean
+  geo boolean
+  totalProfiles integer
+  totalDevices integer
+  riskContacts integer
+  devices string
+  devicesARN string
+}
+
+Table profiles {
+  id string [pk]
+  userID string [ref: > users.id]
+  timestamp timestamp
+  lastTest timestamp
+  totalTests integer
+  name string
+  lastname1 string
+  lastname2 string
+  street string
+  numberExternal string
+  numberInternal string
+  age integer
+  gender string
+  postalCode string
+  stateID string
+  municipalityID string
+  suburbID string
+  contactTrace boolean
+  geo boolean
+  status string
+  level integer
+  trend string
+  anonymous boolean
+  firstSymptom boolean
+  symptom boolean
+  symptomWeek boolean
+  pregnant boolean
+  diabetes boolean
+  hypertension boolean
+  obesity boolean
+  defenses boolean
+  breathing boolean
+}
+
+Table tests {
+  id string [pk]
+  profileID string [ref: > profiles.id]
+  timestamp timestamp
+  totalTests integer
+  age integer
+  gender string
+  postalCode string
+  stateID string
+  municipalityID string
+  suburbID string
+  status string
+  level integer
+  trend string
+  meanonymous boolean
+  firstSymptom boolean
+  symptom boolean
+  symptomWeek boolean
+  pregnant boolean
+  diabetes boolean
+  hypertension boolean
+  obesity boolean
+  defenses boolean
+  breathing boolean
+}
+
+Table bluetraces {
+  id string [pk]
+  userID1 string [ref: > users.id]
+  userID2 string [ref: > users.id]
+  timestamp timestamp
+  timeUpload timestamp
+  modelP string
+  modelC string
+  rssi integer
+  txPower integer
+}
+
+Table locations {
+  id string [pk]
+  userID string [ref: > users.id]
+  timestamp timestamp
+  timeUpload timestamp
+  accuracy double
+  latitude double
+  longitude double
+}
+
+Table exit_requests {
+  id string [pk]
+  profileID string [ref: > profiles.id]
+  timestamp timestamp
+  expiry timestamp
+  deleted boolean
+  latitude double
+  longitude double
+}
+
+Table otps {
+  id string [pk]
+  phoneHash string
+  timestamp timestamp
+  lastTimestamp timestamp
+  retries integer
+  otp integer
+}
+
+Table admins {
+  id string [pk]
+  name string
+  email string
+  password string
+  role integer
+  timestamp timestamp
+  hash string
+  timesHash timestamp
+  retries integer
+  timeRetries timestamp
+  passwordsOld string
+}
+
+Table logs {
+  id string [pk]
+  adminID string [ref: > admins.id]
+  timestamp timestamp
+  uri string
+  method string
+  status integer
+  ip string
+  data string
+}
+
+Table messages {
+  id string [pk]
+  profileID string [ref: > profiles.id]
+  adminID string [ref: > admins.id]
+  timestamp timestamp
+  message string
+  type string
+  aux string
+}
+
+Table states {
+  id string [pk]
+  name string 
+}
+
+Table municipalities {
+  id string [pk]
+  stateID string  [ref: > states.id]
+  name string 
+}
+
+Table suburbs {
+  id string [pk]
+  municipalityID string  [ref: > municipalities.id]
+  name string 
+}
+
+Table postal_codes {
+  id string [pk]
+  country string
+  postalCode string
+  stateID string  [ref: > states.id]
+  municipalityID string  [ref: > municipalities.id]
+  suburbID string  [ref: > suburbs.id]
+  placeName string 
+}

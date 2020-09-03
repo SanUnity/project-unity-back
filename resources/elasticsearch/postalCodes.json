@@ -1,0 +1,20 @@
+{
+    "settings" : {
+        "number_of_shards" : 6, 
+        "number_of_replicas" : 1 
+    },
+    "mappings" : {
+        "dynamic": false,
+        "_source": {
+            "enabled": true
+        },
+        "properties" : {
+            "country" : { "type" : "keyword" },
+            "postalCode" : { "type" : "keyword" },
+            "placeName" : { "type" : "text" },
+            "stateID" : { "type" : "integer" },
+            "municipalityID" : { "type" : "integer" },
+            "suburbID" : { "type" : "integer" }
+        }
+    }
+}

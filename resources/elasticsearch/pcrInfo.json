@@ -1,0 +1,33 @@
+{
+    "settings" : {
+        "number_of_shards" : 12, 
+        "number_of_replicas" : 1 
+    },
+    "mappings" : {
+        "dynamic": false,
+        "_source": {
+            "enabled": true
+        },
+        "properties" : {
+            "userID" : { "type" : "keyword" },
+            "profileID" : { "type" : "keyword" },
+            "centerId" : { "type" : "keyword" },
+            "timestamp" : { "type" : "date", "format" : "epoch_second"},
+            "name" : { "type" : "text" },
+            "lastname" : { "type" : "text" },
+            "email" : { "type" : "text" },
+            "phone" : { 
+                "type" : "text",
+                "fields": {"raw": { "type":  "keyword"}} 
+            },
+            "dateTest" : { "type" : "date", "format" : "yyyy-MM-dd"},
+            "verifiedEmail" : { "type" : "boolean"},
+            "verifiedPhone" : { "type" : "boolean"},
+            "resultTest" : { "type" : "short"},
+            "verified" : { "type" : "boolean"},
+            "readed" : { "type" : "boolean"},
+            "sendedSSA" : { "type" : "boolean"},
+            "pcrResultId" : { "type" : "keyword"}
+        }
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "settings" : {
+        "number_of_shards" : 6, 
+        "number_of_replicas" : 1 
+    },
+    "mappings" : {
+        "dynamic": false,
+        "_source": {
+            "enabled": true
+        },
+        "properties" : {
+            "id" : { "type" : "keyword" },
+            "name" : { 
+                "type" : "text",
+                "fields" : {
+                    "raw" : {"type" : "keyword"}
+                }
+            },
+            "stateIDCVE" : { "type" : "keyword" },
+            "status" : { "type" : "short" },
+            "cases" : { 
+                "properties": {
+                    "confirm":  { "type": "integer" },
+                    "negative":  { "type": "integer" },
+                    "suspicious":  { "type": "integer" },
+                    "death":  { "type": "integer" }
+                }
+            }
+        }
+    }
+}

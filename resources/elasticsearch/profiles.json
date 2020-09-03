@@ -1,0 +1,36 @@
+{
+    "settings" : {
+        "number_of_shards" : 12, 
+        "number_of_replicas" : 1 
+    },
+    "mappings" : {
+        "dynamic": false,
+        "_source": {
+            "enabled": true
+          },
+        "properties" : {
+            "userID" : { "type" : "keyword" },
+            "timestamp" : { "type" : "date", "format" : "epoch_second"},
+            "lastTest" : { "type" : "date", "format" : "epoch_second"},
+            "anonymous" : { "type" : "boolean"},
+            "totalTests" : { "type" : "integer" },
+            "firstSymptom" : { "type" : "boolean"},
+            "age" : { "type" : "short" },
+            "gender" : { "type" : "keyword" },
+            "postalCode" : { "type" : "keyword" },
+            "stateID" : { "type" : "keyword" },
+            "municipalityID" : { "type" : "keyword" },
+            "suburbID" : { "type" : "keyword" },
+            "level" : { "type" : "short" },
+            "trend" : { "type" : "keyword" },
+            "symptom" : { "type" : "boolean" },
+            "symptomWeek" : { "type" : "boolean" },
+            "pregnant" : { "type" : "boolean" },
+            "diabetes" : { "type" : "boolean" },
+            "hypertension" : { "type" : "boolean" },
+            "obesity" : { "type" : "boolean" },
+            "defenses" : { "type" : "boolean" },
+            "breathing" : { "type" : "boolean" }
+        }
+    }
+}

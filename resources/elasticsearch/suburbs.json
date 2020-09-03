@@ -1,0 +1,23 @@
+{
+    "settings" : {
+        "number_of_shards" : 6, 
+        "number_of_replicas" : 1,
+        "max_result_window": 100000
+    },
+    "mappings" : {
+        "dynamic": false,
+        "_source": {
+            "enabled": true
+        },
+        "properties" : {
+            "id" : { "type" : "keyword" },
+            "name" : { 
+                "type" : "text",
+                "fields" : {
+                    "raw" : {"type" : "keyword"}
+                }
+            },
+            "municipalityID" : { "type" : "keyword" }
+        }
+    }
+}
