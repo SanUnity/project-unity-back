@@ -9,7 +9,7 @@
         <table border="0" style="font-family: Arial, Helvetica, sans-serif; margin: 0 auto; padding: 0; width: 600px; border-collapse: collapse;" width="600" height="500">
             <tr style="border-collapse: collapse;">
                 <td style="text-align: center; border-collapse: collapse; background-color: #4d4d4d; border-bottom: 5px solid #AD033C; padding: 20px; height: 30px;">
-                    <img src="{{ Config::get('app.url') }}/img/logo_gobierno.png" width="200">
+                    <img src="{{ Config::get('app.url') }}/img/Logo.png" width="200">
                 </td>
             </tr>
             <tr>
