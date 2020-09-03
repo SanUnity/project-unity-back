@@ -94,6 +94,7 @@ Para la configuración del entorno hay que copiar el fichero .env.example a .env
  - **MODULE_EXPOSURE_NOTIFICATION**, activar las apis para el módulo de Exposure Notification (no se puede activar a la vez que DP3T)
  - **MODULE_PCR**, activar las apis para el módulo de recibir los resultados de PCR
  - **MODULE_SEMAPHORE**, activar las apis para el módulo de la desescalada
+ - **MODULE_EXIT_REQUESTS**, activar las apis para el módulo de peticiones de salida
 
 ## Configuración base de datos
 Como base de datos utilizamos una noSQL (elasticsearch), una vez configurado el fichero .env podemos ejecutar el comando `php artisan elasticsearch:create`, este comando creará los índices necesarios para el uso de la aplicación.

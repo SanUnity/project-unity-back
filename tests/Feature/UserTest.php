@@ -190,6 +190,8 @@ class UserTest extends TestCase
     }
 
     public function testGetExposedData(){
+        sleep(1); //sync elasticsearch
+        
         $response = $this->json('GET', '/api/exposed/' . ((int) (time() - 86400) * 1000 ));
         $response->assertSuccessful();
     }
