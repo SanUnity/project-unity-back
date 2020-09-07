@@ -43,30 +43,34 @@ Route::get("/states/{stateID}/municipalities/{municipalityID}/hospitals", 'UserC
 
 Route::post("/users/error", 'UserController@saveError');
 
-if(config('modules.exitRequests')){
+if(config('modules.exitRequests') || config('app.env') === 'testing'){
     Route::post("/users/profiles/{profileID}/exitRequests", 'UserController@createExitRequest');
     Route::delete("/users/profiles/{profileID}/exitRequests/{exitRequestID}", 'UserController@deleteExitRequest');
 }
 
-if(config('modules.bluetrace')){
+if(config('modules.bluetrace') || config('app.env') === 'testing'){
     Route::get("/users/bluetrace/tempIDs", 'UserController@bluetraceTempIDs');
     Route::post("/users/bluetrace", 'UserController@bluetraceData');
 }
 
-if(config('modules.dp3t') && !config('modules.exposureNotification')){
+if(config('modules.dp3t') && !config('modules.exposureNotification') && config('app.env') !== 'testing'){
     Route::post("/exposed", 'UserController@saveExposedDP3T');
     Route::post("/exposed/end", 'UserController@saveExposedEndDP3T');
     Route::get("/exposed/{batchReleaseTime}", 'UserController@getExposedByBatchReleaseTimeDP3T');
+}else if(config('app.env') === 'testing'){
+    Route::post("/exposed/DP3T", 'UserController@saveExposedDP3T');
+    Route::post("/exposed/DP3T/end", 'UserController@saveExposedEndDP3T');
+    Route::get("/exposed/DP3T/{batchReleaseTime}", 'UserController@getExposedByBatchReleaseTimeDP3T');
 }
 
-if(config('modules.exposureNotification') && !config('modules.dp3t')){
+if((config('modules.exposureNotification') && !config('modules.dp3t')) || config('app.env') === 'testing'){
     Route::post("/exposed", 'UserController@saveExposed');
     Route::get("/exposed/config", 'UserController@getExposedConfig');
     Route::get("/exposed/{batchReleaseTime}", 'UserController@getExposedByBatchReleaseTime');
     Route::post("/exposed/contact", 'UserController@saveExposedContact');
 }
 
-if(config('modules.pcr')){
+if(config('modules.pcr') || config('app.env') === 'testing'){
     Route::post("/users/profiles/{profileID}/pcr", 'UserController@createDataPCR');
     Route::post("/users/profiles/{profileID}/pcr/{pcrID}/validate", 'UserController@verifyOTPPCR');
     Route::put("/users/profiles/{profileID}/pcr", 'UserController@editDataPCR');
@@ -75,7 +79,7 @@ if(config('modules.pcr')){
     Route::get("/users/centers/{centerID}/validate", 'UserController@getValidateCenter');
 }
 
-if(config('modules.semaphore')){
+if(config('modules.semaphore') || config('app.env') === 'testing'){
     Route::post("/users/semaphore/fav", 'UserController@setSemaphoreFav');
     Route::get("/states/info", 'UserController@getStatesInfo');
     Route::get("/municipalities/info", 'UserController@getMunicipalitiesInfo');
@@ -137,7 +141,7 @@ Route::delete("/admins/{adminID}", 'AdminController@deleteAdmin')->middleware('l
 Route::post("/admins/password", 'AdminController@setPassword')->middleware('logAdmin');
 Route::post("/admins/resetPassword", 'AdminController@resetPassword')->middleware('logAdmin');
 
-if(config('modules.semaphore')){
+if(config('modules.semaphore') || config('app.env') === 'testing'){
     Route::get("/admins/states/info", 'AdminController@getStatesInfo')->middleware('logAdmin');
     Route::put("/admins/states/{stateID}/info", 'AdminController@setStatesInfo')->middleware('logAdmin');
     Route::get("/admins/municipalities/info", 'AdminController@getMunicipalitiesInfo')->middleware('logAdmin');
@@ -162,7 +166,7 @@ Route::get("/stats/cases/{interval}", 'AdminController@statsCases')->middleware(
 Route::get("/stats/age", 'AdminController@statsAge')->middleware('logAdmin');
 Route::get("/stats/or/{type}/{stateID}", 'AdminController@statsOddsRatio')->middleware('logAdmin');
 
-if(config('modules.exposureNotification') && !config('modules.dp3t')){
+if((config('modules.exposureNotification') && !config('modules.dp3t')) || config('app.env') === 'testing'){
     Route::get("/admins/en/stats", 'AdminController@enGetStats')->middleware('logAdmin');
     Route::get("/admins/en/config", 'AdminController@enGetConfig')->middleware('logAdmin');
     Route::put("/admins/en/config", 'AdminController@enSetConfig')->middleware('logAdmin');
@@ -172,6 +176,6 @@ if(config('modules.exposureNotification') && !config('modules.dp3t')){
 Route::get("/admins/otps", 'AdminController@getOtpsData')->middleware('logAdmin');
 Route::get("/admins/tests/file", 'AdminController@downloadTests')->middleware('logAdmin');
 
-if(config('modules.pcr')){
+if(config('modules.pcr') || config('app.env') === 'testing'){
     Route::post("/admins/pcr/result", 'AdminController@setPcrResult')->middleware('logAdmin');
 }

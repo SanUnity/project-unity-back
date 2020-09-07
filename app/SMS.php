@@ -3,7 +3,8 @@
 namespace App;
 
 
-use Illuminate\Support\Facades\Crypt;
+use Sns;
+use Aws\Exception\AwsException;
 
 class SMS {
 

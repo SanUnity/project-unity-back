@@ -49,7 +49,7 @@ class DP3T {
     public static function getExposedByBatchReleaseTimeDP3T($batchReleaseTime){
 
         $batchLimit = config('dp3t.batchlength');
-        $start      = config('dp3t.batchlength') - $batchLimit;
+        $start      = $batchReleaseTime - $batchLimit;
 
         $dp3ts = Elastic::search([
             'index'             => 'dp3t',
@@ -163,9 +163,12 @@ class DP3T {
         $rollingPeriodStartNumberEnd    = self::gaenTenMinutesBetween(0, $date->getTimestamp() * 1000);
 
         $query = ['bool' => ['must' => [ 
-            ['range' => ['timestamp' => ['lt' => $publishedUntil]]],
             ['range' => ['rollingStartNumber' => ['gte' => $rollingPeriodStartNumberStart, 'lt' => $rollingPeriodStartNumberEnd]]]
         ] ] ];
+
+        if(config('app.env') !== 'testing'){
+            $query['bool']['must'][] = ['range' => ['timestamp' => ['lt' => $publishedUntil]]];
+        }
 
         if($publishedafter){
             $query['bool']['must'][] = ['range' => ['timestamp' => ['gte' => $publishedafter]]];
@@ -352,19 +355,27 @@ class DP3T {
         }
 
         if($haveVerifyEmail){
-            $dp3tInfo['otpEmail'] = random_int(100000,999999);
-            try{
-                Mail::to($email)->send(new VerifyMail([
-                    'otp' => $dp3tInfo['otpEmail'],
-                ]));
-            }catch(\Exception $e){
-                Log::error('send verify email', ['exception' => $e]);
+            if(config('app.env') === 'testing'){
+                $dp3tInfo['otpEmail'] = 123456;
+            }else{
+                $dp3tInfo['otpEmail'] = random_int(100000,999999);
+                try{
+                    Mail::to($email)->send(new VerifyMail([
+                        'otp' => $dp3tInfo['otpEmail'],
+                    ]));
+                }catch(\Exception $e){
+                    Log::error('send verify email', ['exception' => $e]);
+                }
             }
         }
 
         if($haveVerifyPhone){
-            $dp3tInfo['otpPhone'] = random_int(100000,999999);
-            SMS::send($phone, $dp3tInfo['otpPhone'] . ' es tu código de verificación para ' . config('app.name'));
+            if(config('app.env') === 'testing'){
+                $dp3tInfo['otpPhone'] = 123456;
+            }else{
+                $dp3tInfo['otpPhone'] = random_int(100000,999999);
+                SMS::send($phone, $dp3tInfo['otpPhone'] . ' es tu código de verificación para ' . config('app.name'));
+            }
         }
 
         $dp3tInfo['verifiedEmail'] = $verifiedEmail;
@@ -515,32 +526,33 @@ class DP3T {
         }
 
         if($haveVerifyEmail){
-            $pcrData['_source']['otpEmail'] = random_int(100000,999999);
-            try{
-                Mail::to($email)->send(new VerifyMail([
-                    'otp' => $pcrData['_source']['otpEmail'],
-                ]));
-            }catch(\Exception $e){
-                Log::error('send verify email', ['exception' => $e]);
+            if(config('app.env') === 'testing'){
+                $pcrData['_source']['otpEmail'] = 123456;
+            }else{
+                $pcrData['_source']['otpEmail'] = random_int(100000,999999);
+                try{
+                    Mail::to($email)->send(new VerifyMail([
+                        'otp' => $pcrData['_source']['otpEmail'],
+                    ]));
+                }catch(\Exception $e){
+                    Log::error('send verify email', ['exception' => $e]);
+                }
             }
         }
 
         if($haveVerifyPhone){
-            $pcrData['_source']['otpPhone'] = random_int(100000,999999);
-            SMS::send($phone, $pcrData['_source']['otpPhone'] . ' es tu código de verificación para ' . config('app.name'));
+            if(config('app.env') === 'testing'){
+                $pcrData['_source']['otpPhone'] = 123456;
+            }else{
+                $pcrData['_source']['otpPhone'] = random_int(100000,999999);
+                SMS::send($phone, $pcrData['_source']['otpPhone'] . ' es tu código de verificación para ' . config('app.name'));
+            }
         }
 
         $pcrData['_source']['verifiedEmail'] = $verifiedEmail;
         $pcrData['_source']['verifiedPhone'] = $verifiedPhone;
 
         Elastic::index(['index' => 'pcr_info', 'id' => $pcrData['_id'], 'body' => $pcrData['_source'],'refresh' => "wait_for"]);
-
-        self::sendInfoToSSa([
-            'id'                => $pcrData['_id'],
-            'phone'             => $pcrData['_source']['phone'],
-            'centerId'          => $pcrData['_source']['centerId'],
-            'dateTest'          => $pcrData['_source']['dateTest'],
-        ]);
 
         return [
             'id'                => $pcrData['_id'],

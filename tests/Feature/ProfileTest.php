@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Elastic;
+use Illuminate\Encryption\Encrypter;
 
 class ProfileTest extends TestCase
 {
@@ -187,6 +188,102 @@ class ProfileTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function testPcr(){
+        $cipher     = new Encrypter(md5($this->app['config']['app.QR_PASSWORD']), 'AES-256-CBC');
+        $centerID   = $cipher->encryptString('DFSSA003256');
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])
+            ->json('POST', '/api/users/profiles/' . self::$profileID . '/pcr',[
+                "name"      => "name",
+                "lastname"  => "lastname",
+                "phone"     => "111111111111",
+                "email"     => "email@test.com",
+                "gender"    => "male",
+                "birthday"  => "1987-08-17",
+                "dateTest"  => date('Y-m-d'),
+                "centerId"  => $centerID
+            ]);
+            
+        $response->assertStatus(200)->assertJsonStructure([
+            'id',
+            'haveVerifyEmail',
+            'haveVerifyPhone',
+        ])->assertJson([
+            'haveVerifyEmail'   => true,
+            'haveVerifyPhone'   => true,
+        ]);
+
+        $pcrID = $response->original['id'];
+
+        sleep(1);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])->json('GET', '/api/users/session');
+        $response->assertStatus(200)->assertJsonStructure([
+            'id',
+            'jwt'
+        ]);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])
+            ->json('PUT', '/api/users/profiles/' . self::$profileID . '/pcr',[
+                "id"        => $pcrID,
+                "name"      => "name 2",
+                "lastname"  => "lastname 2",
+                "phone"     => "22222222222222",
+                "email"     => "email2@test.com",
+                "gender"    => "male",
+                "birthday"  => "1987-08-17",
+                "dateTest"  => date('Y-m-d'),
+                "centerId"  => $centerID
+            ]);
+
+        $response->assertStatus(200)->assertJsonStructure([
+            'id',
+            'haveVerifyEmail',
+            'haveVerifyPhone',
+        ])->assertJson([
+            'haveVerifyEmail'   => true,
+            'haveVerifyPhone'   => true,
+        ]);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])
+            ->json('POST', '/api/users/profiles/' . self::$profileID . '/pcr/'.$pcrID.'/validate',[
+                "otpEmail"  => 111111,
+                "otpPhone"  => 111111,
+            ]);
+            
+        $response->assertStatus(200)->assertJson([
+            'email'   => false,
+            'phone'   => false,
+            ]);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])
+            ->json('POST', '/api/users/profiles/' . self::$profileID . '/pcr/'.$pcrID.'/validate',[
+                "otpEmail"  => 123456,
+                "otpPhone"  => 123456,
+            ]);
+            
+        $response->assertStatus(200)->assertJson([
+            'email'   => true,
+            'phone'   => true,
+            ]);
+
+        Elastic::update(['index' => 'pcr_info', 'id' => $pcrID, 'body' => ['doc' => ['resultTest' => 1]],'refresh' => "wait_for"]);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])
+            ->json('POST', '/api/users/profiles/' . self::$profileID . '/pcr/'.$pcrID.'/notify',[
+                "phones"  => [
+                    ['phone' => '123456789', 'name'  => 'Name']
+                ],
+            ]);
+
+        $response->assertStatus(200);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])
+            ->json('POST', '/api/users/profiles/' . self::$profileID . '/pcr/'.$pcrID.'/readed');
+
+        $response->assertStatus(200);
+    }
+
     public function testDeleteProfile(){
         $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])->json('DELETE', '/api/users/profiles/' . self::$profileID);
         $response->assertStatus(200);
@@ -202,6 +299,11 @@ class ProfileTest extends TestCase
             'index'     => 'users',
             'client'    => ['ignore' => 404],
             'body'      => ['query' => ['bool' => ['must' => [ ['term' => ['phoneHash' => $phoneHash]] ] ] ]]
+        ]);
+        Elastic::deleteByQuery([
+            'index'     => 'pcr_info',
+            'client'    => ['ignore' => 404],
+            'body'      => ['query' => ['bool' => ['must' => [ ['term' => ['profileID' => self::$profileID]] ] ] ]]
         ]);
         sleep(1); //sync elasticsearch
     }

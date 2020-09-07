@@ -160,11 +160,12 @@ class UserTest extends TestCase
     }
 
     public function testSetInfected(){
+        
         $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])->json('POST', '/api/exposed', [
             'gaenKeys' => [
                 [
                     'keyData' => 'fakeKey',
-                    'rollingStartNumber' => ((time() - 1000) / 60 / 10),
+                    'rollingStartNumber' => (int) (time() / 60 / 10),
                     'rollingPeriod' => 144,
                 ]
             ]
@@ -192,7 +193,7 @@ class UserTest extends TestCase
     public function testGetExposedData(){
         sleep(1); //sync elasticsearch
         
-        $response = $this->json('GET', '/api/exposed/' . ((int) (time() - 86400) * 1000 ));
+        $response = $this->json('GET', '/api/exposed/' . ((int) (strtotime('today') * 1000 )));
         $response->assertSuccessful();
     }
 
@@ -203,6 +204,33 @@ class UserTest extends TestCase
             "body",
             "actions",
         ]);
+    }
+
+    public function testSetInfectedDp3t(){
+        sleep(1); //sync elasticsearch
+
+        Elastic::deleteByQuery([
+            'index'     => 'dp3t',
+            'client'    => ['ignore' => 404],
+            'body'      => ['query' => ['bool' => ['must' => [ ['term' => ['userID' => self::$userID]] ] ] ]]
+        ]);
+
+        Elastic::update(['index' => 'users', 'id' => self::$userID, 'body' => ['doc' => ['covidPositive' => true]],'refresh' => "false"]);
+
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])->json('POST', '/api/exposed/DP3T', [
+            'key' => 'fakeKey',
+            'keyDate' => (int) ((time() - 1000) * 1000),
+        ]);
+        $response->assertStatus(200);
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$jwt])->json('POST', '/api/exposed/DP3T/end');
+        $response->assertStatus(200);
+    }
+
+    public function testGetExposedDataDp3t(){
+        sleep(1); //sync elasticsearch
+
+        $response = $this->json('GET', '/api/exposed/DP3T/' . ((int) (time() * 1000 )));
+        $response->assertSuccessful();
     }
 
     public function testValidateCenter(){
