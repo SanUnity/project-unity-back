@@ -84,5 +84,6 @@ class Hospitals extends Command
         }
 
         $this->info('Hospitals created');
+        return true;
     }
 }

@@ -60,5 +60,7 @@ class Admin extends Command
         ], 'refresh' => "false"]);
 
         $this->info('Admin created');
+
+        return true;
     }
 }

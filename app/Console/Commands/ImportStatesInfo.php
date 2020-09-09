@@ -208,5 +208,7 @@ class ImportStatesInfo extends Command
 
             Elastic::update(['index' => 'municipalities_info', 'id' => $municipalityID, 'body' => ['doc' => ['status' => 0]],'refresh' => "false"]);
         }
+
+        return true;
     }
 }

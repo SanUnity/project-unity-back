@@ -155,9 +155,7 @@ if(config('modules.semaphore') || config('app.env') === 'testing'){
 Route::get("/stats/ageGender/{type}", 'AdminController@statsAgeGenderType')->middleware('logAdmin');
 Route::get("/stats/symptoms/{type}", 'AdminController@statsSymptoms')->middleware('logAdmin');
 Route::get("/stats/socialSecurity/{type}", 'AdminController@statsSocialSecurity')->middleware('logAdmin');
-Route::get("/stats/socialSecurity/{type}", 'AdminController@statsSocialSecurity')->middleware('logAdmin');
 Route::get("/stats/geo", 'AdminController@statsGeo')->middleware('logAdmin');
-Route::get("/stats/contactTrace", 'AdminController@statsContactTrace')->middleware('logAdmin');
 Route::get("/stats/indicators", 'AdminController@statsIndicators')->middleware('logAdmin');
 Route::get("/stats/states/{type}", 'AdminController@statsStates')->middleware('logAdmin');
 Route::get("/stats/states/{stateID}/municipalities/{type}", 'AdminController@statsMunicipalities')->middleware('logAdmin');

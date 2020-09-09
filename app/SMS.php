@@ -14,11 +14,16 @@ class SMS {
 
         $success = true;
         try {
-            $result = Sns::publish([
-                'Message' => $message,
-                'PhoneNumber' => $phone,
-            ]);
-            return $result['MessageId'];
+
+            $data = [
+                'Message'       => $message,
+                'PhoneNumber'   => $phone,
+            ];
+
+            if(config('app.env') === 'production'){
+                $result = Sns::publish($data);
+                return $result['MessageId'];
+            }
         } catch (AwsException $e) {
             \Log::error('send sms', ['exception' => $e]);
 

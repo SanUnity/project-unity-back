@@ -165,6 +165,6 @@ class ImportData extends Command
         }
 
         $this->info('Postal Codes created');
-        return;
+        return true;
     }
 }

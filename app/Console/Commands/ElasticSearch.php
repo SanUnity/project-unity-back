@@ -344,6 +344,7 @@ class ElasticSearch extends Command
             ]);
             $this->info('jobs created');
         }
-        
+     
+        return true;
     }
 }

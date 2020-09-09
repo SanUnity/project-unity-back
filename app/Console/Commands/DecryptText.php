@@ -42,10 +42,11 @@ class DecryptText extends Command
         try{
             $value = Crypt::decryptString($text);
             $this->info($value);
-            return;
+            return true;
         }catch(\Exception $e){
             //bad encryption
         }
         $this->error('invalid text');
+        return false;
     }
 }

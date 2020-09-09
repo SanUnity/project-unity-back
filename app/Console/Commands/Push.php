@@ -41,8 +41,10 @@ class Push extends Command
         $response = \App\Push::sendToUser([$arn], 'Test push' . config('app.name'), 'Mensaje de prueba');
         if(!$response){
             $this->error('Fail send push');
+            return false;
         }else{
             $this->info('Success send push');
+            return true;
         }
     }
 }

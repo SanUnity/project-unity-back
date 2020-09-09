@@ -594,7 +594,18 @@ class Hospital {
             $data['testingService'] = $input['testingService'];
         }
 
-        Elastic::index(['index' => 'hospitals_tests', 'body' => $data,'refresh' => "false"]);
+        $result = Elastic::index(['index' => 'hospitals_tests', 'body' => $data,'refresh' => "false"]);
+
+        if($result && $result['_id']){
+            $testID = $result['_id'];
+        }else{
+            return response('error creating hospital tests', 400);
+        }
+
+        return [
+            'id'            => $testID,
+            'hospitalID'    => $hospitalID
+        ];
     }
 
     public static function deleteHospital($hospitalID){

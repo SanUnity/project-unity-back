@@ -171,12 +171,10 @@ class UserController extends Controller{
 
         $data['retries']++;
 
-        $sendSMS    = true;
-        $otp        = random_int(100000,999999); 
+        $otp = random_int(100000,999999); 
 
-        if(config('app.env') === 'testing'){
-            $sendSMS    = false;
-            $otp        = 123456;
+        if(config('app.env') !== 'production'){
+            $otp = 123456;
         }
 
         $data['otp'][] = [
@@ -186,9 +184,7 @@ class UserController extends Controller{
 
         Elastic::index(['index' => 'otps', 'id' => $phoneHash, 'body' => $data, 'refresh' => "false"]);
 
-        if($sendSMS){
-            SMS::send($phone, $otp . ' es tu código de verificación para ' . config('app.name'));
-        }
+        SMS::send($phone, $otp . ' es tu código de verificación para ' . config('app.name'));
         
         return [];
     }

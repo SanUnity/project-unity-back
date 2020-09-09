@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Elastic;
 use Illuminate\Encryption\Encrypter;
+use App\Parse;
 
 class UserTest extends TestCase
 {
@@ -129,6 +130,11 @@ class UserTest extends TestCase
         ]);
         $response->assertStatus(200);
 
+    }
+
+    public function testUpdateChannels(){
+        Parse::updateChannels('fakeARN', '1', '1', '1');
+        $this->assertTrue(true);
     }
 
     public function testPostalCode(){

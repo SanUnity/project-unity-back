@@ -102,5 +102,7 @@ class DummyInfo extends Command
                 $now+= (60*60*24);
             }
         }
+
+        return true;
     }
 }

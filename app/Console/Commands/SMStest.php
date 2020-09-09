@@ -42,5 +42,7 @@ class SMStest extends Command
 
         SMS::send($phone, 'Mensaje de prueba con texto desde back');
         $this->info('Send custom');
+
+        return true;
     }
 }

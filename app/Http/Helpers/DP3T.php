@@ -359,23 +359,23 @@ class DP3T {
                 $dp3tInfo['otpEmail'] = 123456;
             }else{
                 $dp3tInfo['otpEmail'] = random_int(100000,999999);
-                try{
-                    Mail::to($email)->send(new VerifyMail([
-                        'otp' => $dp3tInfo['otpEmail'],
-                    ]));
-                }catch(\Exception $e){
-                    Log::error('send verify email', ['exception' => $e]);
-                }
+            }
+            try{
+                Mail::to($email)->send(new VerifyMail([
+                    'otp' => $dp3tInfo['otpEmail'],
+                ]));
+            }catch(\Exception $e){
+                Log::error('send verify email', ['exception' => $e]);
             }
         }
 
         if($haveVerifyPhone){
-            if(config('app.env') === 'testing'){
+            if(config('app.env') !== 'production'){
                 $dp3tInfo['otpPhone'] = 123456;
             }else{
                 $dp3tInfo['otpPhone'] = random_int(100000,999999);
-                SMS::send($phone, $dp3tInfo['otpPhone'] . ' es tu código de verificación para ' . config('app.name'));
             }
+            SMS::send($phone, $dp3tInfo['otpPhone'] . ' es tu código de verificación para ' . config('app.name'));
         }
 
         $dp3tInfo['verifiedEmail'] = $verifiedEmail;
@@ -530,23 +530,23 @@ class DP3T {
                 $pcrData['_source']['otpEmail'] = 123456;
             }else{
                 $pcrData['_source']['otpEmail'] = random_int(100000,999999);
-                try{
-                    Mail::to($email)->send(new VerifyMail([
-                        'otp' => $pcrData['_source']['otpEmail'],
-                    ]));
-                }catch(\Exception $e){
-                    Log::error('send verify email', ['exception' => $e]);
-                }
+            }
+            try{
+                Mail::to($email)->send(new VerifyMail([
+                    'otp' => $pcrData['_source']['otpEmail'],
+                ]));
+            }catch(\Exception $e){
+                Log::error('send verify email', ['exception' => $e]);
             }
         }
 
         if($haveVerifyPhone){
-            if(config('app.env') === 'testing'){
+            if(config('app.env') !== 'production'){
                 $pcrData['_source']['otpPhone'] = 123456;
             }else{
                 $pcrData['_source']['otpPhone'] = random_int(100000,999999);
-                SMS::send($phone, $pcrData['_source']['otpPhone'] . ' es tu código de verificación para ' . config('app.name'));
             }
+            SMS::send($phone, $pcrData['_source']['otpPhone'] . ' es tu código de verificación para ' . config('app.name'));
         }
 
         $pcrData['_source']['verifiedEmail'] = $verifiedEmail;

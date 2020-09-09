@@ -52,8 +52,9 @@ class Push {
                 $data['Message']['GCM']                     = json_encode($data['Message']['GCM']);
                 $data['Message']                            = json_encode($data['Message']);
 
-                $result = Sns::publish($data);
-
+                if(config('app.env') !== 'testing'){
+                    $result = Sns::publish($data);
+                }
             } catch (AwsException $e) {
                 \Log::error('send push', ['exception' => $e]);
 
@@ -113,7 +114,9 @@ class Push {
             $data['Message']['GCM'] = json_encode($data['Message']['GCM']);
             $data['Message']        = json_encode($data['Message']);
 
-            $result = Sns::publish($data);
+            if(config('app.env') !== 'testing'){
+                $result = Sns::publish($data);
+            }
 
         } catch (AwsException $e) {
             \Log::error('send push', ['exception' => $e]);
