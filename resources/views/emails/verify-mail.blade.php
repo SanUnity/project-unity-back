@@ -16,7 +16,7 @@
                 <td style="background-color: #f1f1f1; padding: 25px 50px; vertical-align: top;">
                     <h1 style="font-size: 16px;">Hola,</h1>
                     <p style="font-size: 14px;">Has solicitado la verificación del emaill en la plataforma de {{ Config::get('app.name') }}.</p>
-                    <p style="font-size: 14px;">Tu código de verificación es: <b>{{ $data['otp'] }}</b></p>
+                    <p style="font-size: 14px;">Tu código de verificación es: <strong>{{ $data['otp'] }}</strong></p>
                     <br>
                     <p style="font-size: 13px;">Equipo del Proyecto Unity.</p>
                 </td>
