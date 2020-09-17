@@ -34,6 +34,8 @@ class Message {
         }
 
         Elastic::clearScroll(['body' => ['scroll_id' => $scrollsIDs]]);
+
+        return true;
     }
 
     public static function sendMessageState($stateID, $adminID, Request $request){
@@ -183,7 +185,7 @@ class Message {
             if(!empty($params['body'])){
                 Elastic::bulk($params);
             }
-        }catch (Exception $e){
+        }catch (\Exception $e){
 
         }
     }

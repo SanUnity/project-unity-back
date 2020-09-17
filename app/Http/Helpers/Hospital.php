@@ -616,6 +616,8 @@ class Hospital {
             'client'    => ['ignore' => 404],
             'body'      => ['query' => ['bool' => ['must' => [ ['term' => ['hospitalID' => $hospitalID]] ] ] ]]
         ]);
+
+        return [];
     }
 
     public static function editHospitalsTests($hospitalID, $testID, Request $request){

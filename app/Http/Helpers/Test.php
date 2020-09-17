@@ -622,6 +622,12 @@ class Test {
                     }
                 }
 
+                $anonymous = 1;
+                $profileData = Elastic::get(['index' => 'profiles', 'id' => $test['_source']['profileID'], 'client' => ['ignore' => 404]]);
+                if($profileData || $profileData['found']){
+                    $anonymous = isset($profile['_source']['anonymous']) && $profile['_source']['anonymous'] ? 1 : 0;
+                }
+
                 fputcsv ($gestor, [
                     $test['_id'],
                     $test['_source']['profileID'],
@@ -632,7 +638,7 @@ class Test {
                     $test['_source']['postalCode'],
                     $test['_source']['age'],
                     $test['_source']['gender'],
-                    isset($profile['_source']['anonymous'])  && $profile['_source']['anonymous'] ? 1 : 0,
+                    $anonymous,
                     $resultTest,
                     $test['_source']['level'] ? 1 : 0,
                     $test['_source']['firstSymptom'] ? 1 : 0,

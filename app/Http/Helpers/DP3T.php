@@ -36,6 +36,8 @@ class DP3T {
 
             Elastic::index(['index' => 'dp3t', 'body' => $data,'refresh' => "false"]);
         }
+
+        return [];
     }
 
     public static function saveExposedEndDP3T($userID){
@@ -44,6 +46,8 @@ class DP3T {
         if($user && $user['found'] && isset($user['_source']['covidPositive']) && $user['_source']['covidPositive'] === true){
             Elastic::update(['index' => 'users', 'id' => $user['_id'], 'body' => ['doc' => ['covidPositive' => false]],'refresh' => "false"]);
         }
+
+        return [];
     }
 
     public static function getExposedByBatchReleaseTimeDP3T($batchReleaseTime){
@@ -656,6 +660,8 @@ class DP3T {
         ];
 
         Elastic::index(['index' => 'dp3t_config', 'id' => $id, 'body' => $config, 'refresh' => "false"]);
+
+        return [];
     }
 
 
@@ -684,6 +690,8 @@ class DP3T {
 
     public static function readedPCR($pcr, Request $request){
         Elastic::update(['index' => 'pcr_info', 'id' => $pcr['_id'], 'body' => ['doc' => ['readed' => true]],'refresh' => "false"]);
+
+        return [];
     }
 
     public static function notifyPCR($userID, $profile, $pcr, Request $request){
@@ -733,6 +741,8 @@ class DP3T {
 
             // Elastic::update(['index' => 'pcr_info', 'id' => $pcr['_id'], 'body' => ['doc' => ['readed' => true]],'refresh' => "false"]);
         }
+
+        return [];
     }
 
 }

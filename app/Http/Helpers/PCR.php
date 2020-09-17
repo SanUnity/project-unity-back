@@ -130,5 +130,7 @@ class PCR {
                 }
             }
         }
+
+        return [];
     }
 }

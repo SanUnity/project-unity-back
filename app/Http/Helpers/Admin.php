@@ -232,7 +232,8 @@ class Admin {
                     'hash' => $hashResetPassword,
                 ]));
             }
-        }   
+        }
+        return [];   
     }
 
     public static function setPassword(Request $request){
@@ -311,6 +312,8 @@ class Admin {
 
     public static function deleteAdmin($adminID){
         Elastic::delete(['index' => 'admins', 'id' => $adminID,'refresh' => "wait_for"]);
+
+        return [];
     }
 
     public static function getOtpsData(Request $request){

@@ -131,6 +131,8 @@ class User {
             'client'    => ['ignore' => 404],
             'body'      => ['query' => ['bool' => ['must' => [ ['term' => ['profileID' => $profileID]] ] ] ]]
         ]);
+
+        return [];
     }
 
     public static function createDataTest($profileID, $request, $timestamp, $profile){
@@ -312,7 +314,6 @@ class User {
     }
 
     public static function getExitRequest($profileIDs, &$profilesData){
-        return; //disable in federal
 
         $exitRequests = Elastic::search([
             'index'     => 'exit_requests',
@@ -464,6 +465,8 @@ class User {
     
             }
         }
+
+        return [];
     }
 
     public static function devicetoken($userID, Request $request){
@@ -503,6 +506,8 @@ class User {
                 'response'      => $response,
             ]);
         }
+
+        return [];
     }
 
     public static function anonymousDevicetoken(Request $request){
@@ -521,6 +526,8 @@ class User {
             'deviceType'    => $deviceType,
             'response'      => $response,
         ]);
+
+        return [];
     }
 
     public static function saveError($userID, Request $request){
@@ -529,6 +536,8 @@ class User {
         $log['timestamp']   = time();
 
         Elastic::index(['index' => 'logs_error', 'body' => $log,'refresh' => "false"]);
+
+        return [];
     }
 
     public static function logout($userID, Request $request){
@@ -568,12 +577,15 @@ class User {
         $state = $request->input('state');
 
         Elastic::update(['index' => 'users', 'id' => $userID, 'body' => ['doc' => ['state' => $state]],'refresh' => "false"]);
+
+        return [];
     }
 
     public static function setDefaultProfile($userID, $profileID){
         
-
         Elastic::update(['index' => 'users', 'id' => $userID, 'body' => ['doc' => ['mainProfile' => $profileID]],'refresh' => "false"]);
+
+        return [];
     }
 
 
@@ -581,6 +593,8 @@ class User {
         $fav = $request->input('fav');
 
         Elastic::update(['index' => 'users', 'id' => $userID, 'body' => ['doc' => ['semaphoreFav' => $fav]],'refresh' => "false"]);
+
+        return [];
     }
 
     public static function getValidateCenter($centerID, $returnCenter = false){

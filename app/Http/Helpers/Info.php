@@ -125,6 +125,8 @@ class Info {
         }
         
         Elastic::update(['index' => 'states_info', 'id' => $stateID, 'body' => ['doc' => ['status' => $statusValue]],'refresh' => "wait_for"]);
+
+        return [];
     }
     
     public static function getMunicipalitiesInfo(Request $request){
@@ -214,6 +216,8 @@ class Info {
         }
         
         Elastic::update(['index' => 'municipalities_info', 'id' => $municipalityID, 'body' => ['doc' => ['status' => $statusValue]],'refresh' => "wait_for"]);
+
+        return [];
     }
 
     public static function downloadStatesInfo(Request $request){

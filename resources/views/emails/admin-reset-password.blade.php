@@ -6,11 +6,11 @@
         <title>::Proyecto Unity::</title>
     </head>
     <body>
-        <table border="0" style="font-family: Arial, Helvetica, sans-serif; margin: 0 auto; padding: 0; width: 600px; border-collapse: collapse;" width="600" height="500">
+        <table border="0" style="font-family: Arial, Helvetica, sans-serif; margin: 0 auto; padding: 0; width: 600px; border-collapse: collapse;" width="600" height="500" summary="content mail">
             <tr style="border-collapse: collapse;">
-                <td style="text-align: center; border-collapse: collapse; background-color: #4d4d4d; border-bottom: 5px solid #AD033C; padding: 20px; height: 30px;">
-                    <img src="{{ Config::get('app.url') }}/img/Logo.png" width="200">
-                </td>
+                <th style="text-align: center; border-collapse: collapse; background-color: #4d4d4d; border-bottom: 5px solid #AD033C; padding: 20px; height: 30px;">
+                    <img src="{{ Config::get('app.url') }}/img/Logo.png" width="200" alt="logo">
+                </th>
             </tr>
             <tr>
                 <td style="background-color: #f1f1f1; padding: 25px 50px; vertical-align: top;">
